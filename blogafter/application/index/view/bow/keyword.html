@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery制作tag标签添加和删除插件代码</title>
+<style>.tags { background-color: #fff; border: 1px solid #d5d5d5; color: #777; padding: 4px 6px; width: 406px; margin: 40px auto; }.tags:hover { border-color: #f59942; outline: 0 none; }.tags[class*="span"] { float: none; margin-left: 0; }.tags input[type="text"], .tags input[type="text"]:focus { border: 0 none; box-shadow: none; display: inline; line-height: 22px; margin: 0; outline: 0 none; padding: 4px 6px; }.tags .tag { background-color: #91b8d0; color: #fff; display: inline-block; font-size: 12px; font-weight: normal; margin-bottom: 3px; margin-right: 3px; padding: 4px 22px 5px 9px; position: relative; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15); transition: all 0.2s ease 0s; vertical-align: baseline; white-space: nowrap; }.tags .tag .close { bottom: 0; color: #fff; float: none; font-size: 12px; line-height: 20px; opacity: 1; position: absolute; right: 0; text-align: center; text-shadow: none; top: 0; width: 18px; }.tags .tag .close:hover { background-color: rgba(0, 0, 0, 0.2); }.close { color: #000; float: right; font-size: 21px; font-weight: bold; line-height: 1; opacity: 0.2; text-shadow: 0 1px 0 #fff; }.close:hover, .close:focus { color: #000; cursor: pointer; opacity: 0.5; text-decoration: none; }button.close { background: transparent none repeat scroll 0 0; border: 0 none; cursor: pointer; padding: 0; }.tags .tag-warning { background-color: #ffb752; } 
+</style>
+
+<form>
+
+	<div class="tags" id="tags" tabindex="1"> 
+		{volist name="keyword" id= 'vo'}
+			<span class='tag' >{$vo.af_key_word}<button class='close' id="{$vo.id}" type='button'>×</button></span>
+		{/volist}
+		<input id="form-field-tags" type="text" placeholder="请输入标签 ..." value="Tag Input Control" name="tags" style="display: none;">  
+		<input type="text" placeholder="请输入标签 ..." class="tags_enter" autocomplete="off">
+	<button  class="quxiao btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+	</div>
+		
+</form>
+<link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+
+<script src="static/kw/js/jquery-1.8.0.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+	
+	$(function() {
+		$(".tags_enter").blur(function() { //焦点失去触发 
+		
+			var txtvalue=$(this).val().trim();
+			if(txtvalue!=''){
+				addTag($(this));
+				$(this).parents(".tags").css({"border-color": "#d5d5d5"})
+			}
+		}).keydown(function(event) {
+			var key_code = event.keyCode;
+			var txtvalue=$(this).val().trim(); 
+			if (key_code == 13&& txtvalue != '') { //enter
+				addTag($(this));
+			}
+			if (key_code == 32 && txtvalue!='') { //space
+				addTag($(this));
+			}
+		});
+		$(".close").live("click", function() {
+			var id = $(this).attr('id');
+			var obj = $(this);
+			$.post("/keyworddel",{id:id},function(msg)
+			{
+				if(msg.code == '1002')
+				{
+					alert('删除成功');
+					obj.parent(".tag").remove();
+				}
+				
+			}, 'json')
+		});
+		$(".tags").click(function() {
+			$(this).css({"border-color": "#f59942"})
+		}).blur(function() {
+			$(this).css({"border-color": "#d5d5d5"})
+		})
+})
+function addTag(obj) {
+	var tag = obj.val();
+
+	if (tag != '') {
+		var i = 0;
+		$(".tag").each(function() {
+			if ($(this).text() == tag + "×") {
+				alert('关键词重复');
+				$(this).addClass("tag-warning");
+				setTimeout("removeWarning()", 400);
+				i++;
+			}
+		})
+		obj.val('');
+		if (i > 0) { //说明有重复
+
+			return false;
+		}
+		$.post("/keyword",{af_key_word:tag},function(msg)
+		{
+			if(msg.code == '1000')
+			{
+				alert(msg.msg);
+				$("#form-field-tags").before("<span class='tag'>" +tag+ "<button class='close' type='button'>×</button></span>"); //添加标签
+			}
+			
+		}, 'json')
+		
+	}
+}
+function removeWarning() {
+	$(".tag-warning").removeClass("tag-warning");
+}
+$('.quxiao').click(function()
+{
+	history.go(-1);
+})
+
+
+</script>
+</body>
+</html>

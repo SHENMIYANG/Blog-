@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>博客正文</title>
+	 <link rel="stylesheet" href="/static/tanchu/style.css" media="all" />
+    
+</head>
+<body>
+	<div style="text-align: center">
+		<th>{$bktext.bw_name}</th><br>
+		<tr>作者：{$bktext.bw_author}</tr><br>
+		<tr>{$bktext.bk_text}</tr><br>
+		<a class="btn btn-primary btn-large tongguo" id="{$bktext.bw_id}">通过审核</a> | <a class="btn btn-primary btn-large theme-login" href="javascript:;">不通过审核</a>
+	</div>
+	<div class="theme-popover">
+        <div class="theme-poptit">
+            <a href="javascript:;" title="关闭" class="close">×</a>
+            <h3>审核不通过理由</h3>
+        </div>
+        <div class="theme-popbod dform">
+            <form class="theme-signin" name="loginform" action="/bwnopass" method="post">
+                <ol>
+                    <li><h4></h4></li>
+                    <input type="hidden" name="bw_id" value="{$bktext.bw_id}">
+                    <li><strong>理由：</strong><input class="ipt" type="text" name="bw_reason"  placeholder="请输入理由" size="50" /></li>
+                    
+                    <li><input class="btn btn-primary" type="submit"  value=" 发 送 " /></li>
+                </ol>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+<script src="/static/tanchu/jquery.min.js"></script>
+<script src="/static/assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="/static/layer/layer.js"></script>
+
+
+<script>
+	 $(document).ready(function ($) {
+
+            $('.theme-login').click(function () {
+
+                $('.theme-popover-mask').fadeIn(100);
+                $('.theme-popover').slideDown(200);
+            })
+            $('.theme-poptit .close').click(function () {
+                $('.theme-popover-mask').fadeOut(100);
+                $('.theme-popover').slideUp(200);
+            })
+
+        });
+	 $('.tongguo').click(function()
+	 {
+	 	var bw_id = $(this).attr('id');
+	 	$.post('/bwpass',{bw_id:bw_id},function(msg)
+	 	{
+	 		console.log(msg.code);
+	 		if(msg.code == '1001')
+	 		{
+	 			layer.msg('审核成功', {icon: 6,time: 2000,shade: [0.5,'#333333']},function(index){
+				location.href='/bwpass';
+
+				layer.close(index);
+
+				});
+	 		}
+	 	}, 'json')
+	 })
+</script>

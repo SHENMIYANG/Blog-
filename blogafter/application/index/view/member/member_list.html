@@ -1,0 +1,206 @@
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+		<i class="Hui-iconfont">&#xe67f;</i> <a href="/after">首页</a>
+			<span class="c-gray en">&gt;</span> <a href="/advertlist">广告管理</a>
+			<span class="c-gray en">&gt;</span> <a href="/advertlist">广告展示列表 </a>
+			<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="
+			javascript:location.replace(location.href);" title="刷新" >
+				<i class="Hui-iconfont">&#xe68f;</i>
+			</a>
+	</nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div class="cl pd-5 bg-1 bk-gray mt-20">  <span class="r">共有数据：<strong>54</strong> 条</span> </div>
+			<div class="mt-20">
+				<table class="table table-border table-bordered table-bg table-hover table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="40"><input name="" type="checkbox" value=""></th>
+							<th width="50">ID</th>
+							<th width="80">用户昵称</th>
+							<th width="100">用户账号</th>					
+							<th width="150">用户邮箱</th>
+							<th width="150">用户手机号</th>
+							<th width="150">用户添加时间</th>
+							<th width="60">状态</th>
+							<th width="100">操作</th>
+						</tr>
+					</thead>
+					<tbody id="data">
+						{volist name="member" id="vo"}
+						<tr class="text-c">
+							<td><input name="" type="checkbox" value=""></td>
+							<td>{$vo.id}</td>
+							<td>{$vo.strlookname}</td>
+							<td>{$vo.strloginname}</td>
+							<td>{$vo.stremail}</td>
+							<td>{$vo.strtel}</td>
+							<td class="text-c">{$vo.strcreatetime|date="Y-m-d H:i:s"}</td>
+							<td class="td-status">
+								{switch vo.strstatus}
+									{case 0}
+										<span class="label label-success radius">启用</span>
+									{/case}
+									{case 1}
+										<span class="label label-default radius">禁用</span>
+									{/case}
+									{case 2}
+										<span class="label label-default radius">封号</span>
+									{/case}
+									{case 3}
+										<span class="label label-default radius">删除</span>
+									{/case}
+								{/switch}
+							</td>
+							<td class="f-14 td-manage">
+									{switch vo.strstatus}
+									{case 0}
+										<a  onClick="admin_stop(this,{$vo.id})" href="javascript:;" title="封号"><i class="Hui-iconfont">&#xe631;</i></a> 
+										<a class="btn btn-primary btn-large theme-login" href="javascript:;" data-id="{$vo.id}">禁用</a>
+										<a class="c-primary del" href="javascript:;" id="{$vo.id}">删除</a>
+									{/case}
+									{case 1}
+										<a  onClick="admin_stop(this,{$vo.id})" href="javascript:;" title="封号"><i class="Hui-iconfont">&#xe631;</i></a> 
+										<a class="btn btn-primary btn-large start" id="{$vo.id}">启用</a>
+										<a class="c-primary del" href="javascript:;" id="{$vo.id}">删除</a>
+									{/case}
+									{case 2}
+										<a onClick="admin_start(this,{$vo.id})" href="javascript:;" title="解封" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a>
+										<a class="c-primary del" href="javascript:;" id="{$vo.id}">删除</a>
+									{/case}
+									{case 3}
+										<a class="btn btn-primary btn-large start" id="{$vo.id}">启用</a>
+									{/case}
+								{/switch}
+								</td>					
+							</td>
+						</tr>											
+					{/volist}
+					</tbody>
+					<div class="theme-popover" id="theme-popover">
+					        <div class="theme-poptit">
+					            <a href="javascript:;" title="关闭" class="close">×</a>
+					            <h3>禁用理由</h3>
+					        </div>
+					        <div class="theme-popbod dform">
+					            <form class="theme-signin" name="loginform" action="/member_stop" method="post">
+					                <ol>
+					                    <li><h4></h4></li>
+					                    <input type="hidden" name="id" value="">
+					                    <li><strong>天数：</strong>
+					                    	<select name="strstopday" id="">
+					                    		<option value="3">3天</option>
+					                    		<option value="7">7天</option>
+					                    		<option value="30">30天</option>
+					                    	</select>
+					                    </li>
+					                    <br>		
+					                    <li><strong>理由：</strong><input class="ipt" type="text" name="strreason"  placeholder="请输入理由" size="50" /></li>
+					                    <br>	
+					                    <li><input class="btn btn-primary" type="submit"  value=" 禁 用 " /></li>
+					                </ol>
+					            </form>
+					        </div>
+				   	 	</div>	
+				</table>
+			</div>
+		</article>
+	</div>
+</section>
+
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+
+<script type="text/javascript">
+
+/*-删除*/
+function admin_stop(obj,id){
+
+	layer.confirm('确认要封号吗？',function(index){
+		//此处请求后台程序，下方是成功后的前台处理……
+		var strstatus = 2;
+
+		$.post('/member_start',{id:id,strstatus:strstatus},function(msg)
+		{			
+			$(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">封号</span>');		
+			$(obj).parents("tr").find(".td-manage").html('<a onClick="admin_start(this,id)" href="javascript:;" title="解封" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a> <a class="c-primary del" href="javascript:;" id="id">删除</a>');
+			
+			$(obj).remove();
+			layer.msg('已封号!',{icon: 5,time:1000});
+		}, 'json')
+
+	});
+}
+/*管理员-启用*/
+function admin_start(obj,id){
+	
+	layer.confirm('确认要解封吗？',function(index){
+		//此处请求后台程序，下方是成功后的前台处理……
+		var strstatus = 0;
+
+		$.post('/member_start',{id:id,strstatus:strstatus},function(msg)
+		{	
+			$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">启用</span>');
+			$(obj).parents("tr").find(".td-manage").html('<a  onClick="admin_stop(this,id)" href="javascript:;" title="封号"><i class="Hui-iconfont">&#xe631;</i></a> <a class="btn btn-primary btn-large theme-login" href="javascript:;" data-id="{$vo.id}">禁用</a> <a class="c-primary del" href="javascript:; id="id">删除</a>');
+			
+			$(obj).remove();
+			layer.msg('已解封!', {icon: 6,time:1000});
+		}, 'json')
+	});
+}
+
+ $(document).ready(function ($) {
+
+            $('.theme-login').click(function () {
+            	var id = $(this).data('id');
+            	$('.theme-popover').find('input[name="id"]').val(id);          
+                $('.theme-popover-mask').fadeIn(100);
+                $('#theme-popover').slideDown(200);
+            })
+            $('.theme-poptit .close').click(function () {
+                $('.theme-popover-mask').fadeOut(100);
+                $('.theme-popover').slideUp(200);
+            })
+
+        });
+	 $('.start').click(function()
+	 {
+	 	var id = $(this).attr('id');
+	 	var strstatus = 0;
+	 	
+	 	$.post('/member_start',{id:id,strstatus:strstatus},function(msg)
+	 	{
+	 		console.log(msg.code);
+	 		if(msg.code == '1001')
+	 		{
+	 			layer.msg('启用成功', {icon: 6,time: 2000,shade: [0.5,'#333333']},function(index){
+				location.href='/member_list';
+
+				layer.close(index);
+
+				});
+	 		}
+	 	}, 'json')
+	 })
+	 $('.del').click(function()
+	 {
+	 	var id = $(this).attr('id');
+	 	var strstatus = 3;
+
+	 	$.post('/member_del',{id:id,strstatus:strstatus},function(msg)
+	 	{
+	 		console.log(msg.code);
+	 		if(msg.code == '1001')
+	 		{
+	 			layer.msg('删除成功', {icon: 6,time: 2000,shade: [0.5,'#333333']},function(index){
+				location.href='/member_list';
+
+				layer.close(index);
+
+				});
+	 		}
+	 	}, 'json')
+	 })
+
+</script>

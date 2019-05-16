@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>博客正文</title>
+	 <link rel="stylesheet" href="/static/tanchu/style.css" media="all" />
+    
+</head>
+<body>
+	<div style="text-align: center">
+		<th>评论文章标题：{$pl.bw_name}</th><br>
+		<br>
+		<tr>{$pl.pl_author}:  <textarea name="" id="" cols="40" rows="5" disabled="disabled">{$pl.pl_content}</textarea> <br>
+		<br>
+		<tr>{$pl.pl_createtime|date="Y-m-d H:i:s"}</tr><br>
+		<br>
+		<a class="btn btn-primary btn-large tongguo" id="{$pl.pl_id}">通过审核</a> | <a class="btn btn-primary btn-large theme-login" href="javascript:;">不通过审核</a>
+	</div>
+	<div class="theme-popover">
+        <div class="theme-poptit">
+            <a href="javascript:;" title="关闭" class="close">×</a>
+            <h3>审核不通过理由</h3>
+        </div>
+        <div class="theme-popbod dform">
+            <form class="theme-signin" name="loginform" action="/plnopass" method="post">
+                <ol>
+                    <li><h4></h4></li>
+                    <input type="hidden" name="pl_id" value="{$pl.pl_id}">
+                    <li><strong>理由：</strong><input class="ipt" type="text" name="pl_reason"  placeholder="请输入理由" size="50" /></li>
+                    
+                    <li><input class="btn btn-primary" type="submit"  value=" 发 送 " /></li>
+                </ol>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+<script src="/static/tanchu/jquery.min.js"></script>
+<script src="/static/assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="/static/layer/layer.js"></script>
+
+
+<script>
+	 $(document).ready(function ($) {
+
+            $('.theme-login').click(function () {
+
+                $('.theme-popover-mask').fadeIn(100);
+                $('.theme-popover').slideDown(200);
+            })
+            $('.theme-poptit .close').click(function () {
+                $('.theme-popover-mask').fadeOut(100);
+                $('.theme-popover').slideUp(200);
+            })
+
+        });
+	 $('.tongguo').click(function()
+	 {
+	 	var pl_id = $(this).attr('id');
+	 	$.post('/plpass',{pl_id:pl_id},function(msg)
+	 	{
+	 		console.log(msg.code);
+	 		if(msg.code == '1001')
+	 		{
+	 			layer.msg('审核成功', {icon: 6,time: 2000,shade: [0.5,'#333333']},function(index){
+				location.href='/plpass';
+
+				layer.close(index);
+
+				});
+	 		}
+	 	}, 'json')
+	 })
+</script>

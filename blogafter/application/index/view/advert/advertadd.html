@@ -1,0 +1,72 @@
+
+<title>新增广告</title>
+<link href="lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="page-container">
+	<form  action="/advertadd" method="post" class="form form-horizontal" id="form-article-add" enctype="multipart/form-data">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">广告标题：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="ad_name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">广告链接：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="ad_link">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>发布日期：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input id="meeting" type="datetime-local" name="ad_timestart"/>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>结束日期：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input id="meeting" type="datetime-local" name="ad_timestop" />
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">广告摘要：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<textarea name="ad_desc" cols="" rows="" class="textarea"  placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onKeyUp="textarealength(this,200)"></textarea>
+				<p class="textarea-numberbar"><em class="textarea-length">0</em>/200</p>
+			</div>
+		</div> 
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">广告图片：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="file" class="input-text" value="" placeholder="" id="" name="ad_imgs">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存并提交审核</button>
+				<button  class="quxiao btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+</div>
+
+ 
+
+
+<link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+<script type="text/javascript" src="lib/webuploader/0.1.5/webuploader.min.js"></script> 
+<script src="static/assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="static/layer/layer.js"></script>
+<script>
+	
+$('.quxiao').click(function()
+{
+	history.go(-1);
+})
+
+</script>
