@@ -1,0 +1,85 @@
+<article>
+  <h1 class="t_nav"><a href="/" class="n1">网站首页</a><a href="/about" class="n2">全站博文</a></h1>
+  <div class="infos">
+    <div class="newsview">
+      <h3 class="news_title">{$bwtext->bw_name}</h3>
+      <div class="news_author"><span class="au01"><a href="/about">{$bwtext->bw_author}</a></span><span class="au02">{$bwtext->bw_createtime|date="Y-m-d"}</span><span class="au03">共<b><script src=""></script>{$bwtext->bw_zan}</b>点赞</span></div>
+      <div class="tags"><a href="/about" target="_blank">个人博客</a> &nbsp; <a href="/about" target="_blank">小世界</a></div>
+      <div class="news_about"><strong>简介</strong>{$bwtext->bw_desc}</div>
+      <div class="news_infos">{$bwtext->bk_text->bk_text|raw}</div>
+    </div>
+    <div class="share"> </div>
+    <div class="nextinfo">
+  
+    </div>
+    <div class="otherlink">
+
+    </div>
+    <div class="news_pl">
+      <h2>文章评论</h2>
+      <ul>
+        <div class="gbko"> </div>
+      </ul>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="search">
+      <form action="/e/search/index.php" method="post" name="searchform" id="searchform">
+        <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字'}" type="text">
+        <input name="show" value="title" type="hidden">
+        <input name="tempid" value="1" type="hidden">
+        <input name="tbname" value="news" type="hidden">
+        <input name="Submit" class="input_submit" value="搜索" type="submit">
+      </form>
+    </div>
+    <div class="lmnav">
+      <h2 class="hometitle">栏目导航</h2>
+      <ul class="navbor">
+        <li><a href="#">关于我</a></li>
+        <li><a href="#">博客首页</a>
+          <ul>
+            <li><a href="#">我的博文</a></li>
+            <li><a href="#">全站博文</a></li>
+          </ul>
+        </li>
+        <li><a href="#">个人中心</a>
+          <ul>
+            <li><a href="#">我的收藏</a></li>
+            <li><a href="#">我的评论</a></li>
+            <li><a href="#">我的关注</a></li>
+          </ul>
+        </li>
+        <li><a href="#">慢生活</a></li>
+      </ul>
+    </div>
+    <div class="paihang">
+      <h2 class="hometitle">点击排行</h2>
+      <ul>
+        <li><b><a href="/download/div/2015-04-10/746.html" target="_blank">【活动作品】柠檬绿兔小白个人博客模板30...</a></b>
+          <p><i><img src="images/t02.jpg"></i>展示的是首页html，博客页面布局格式简单，没有复杂的背景，色彩局部点缀，动态的幻灯片展示，切换卡，标...</p>
+        </li>
+      </ul>
+    </div>
+    <div class="cloud">
+      <h2 class="hometitle">标签云</h2>
+      <ul>
+        <a href="/">陌上花开</a> <a href="/">校园生活</a> <a href="/">html5</a> <a href="/">SumSung</a> <a href="/">青春</a> <a href="/">温暖</a> <a href="/">阳光</a> <a href="/">三星</a><a href="/">索尼</a> <a href="/">华维荣耀</a> <a href="/">三星</a> <a href="/">索尼</a>
+      </ul>
+    </div>
+    <div class="paihang">
+      <h2 class="hometitle">站长推荐</h2>
+      <ul>
+        <li><b><a href="/download/div/2015-04-10/746.html" target="_blank">【活动作品】柠檬绿兔小白个人博客模板30...</a></b>
+          <p><i><img src="images/t02.jpg"></i>展示的是首页html，博客页面布局格式简单，没有复杂的背景，色彩局部点缀，动态的幻灯片展示，切换卡，标...</p>
+        </li>
+      </ul>
+    </div>
+    <div class="weixin">
+      <h2 class="hometitle"></h2>
+      <ul>
+    
+      </ul>
+    </div>
+    <div class="ad" id="left_flow2">  </div>
+  </div>
+</article>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>上传头像</title>
+</head>
+<style>
+	.button { /* 按钮美化 */
+	width: 70px; /* 宽度 */
+	height: 25px; /* 高度 */
+	border-width: 0px; /* 边框宽度 */
+	border-radius: 3px; /* 边框半径 */
+	background: #1E90FF; /* 背景颜色 */
+	cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+	outline: none; /* 不显示轮廓线 */
+	font-family: Microsoft YaHei; /* 设置字体 */
+	color: white; /* 字体颜色 */
+	font-size: 13px; /* 字体大小 */
+	}
+	.button:hover { /* 鼠标移入按钮范围时改变颜色 */
+		background: #5599FF;
+	}
+
+</style>
+<body>
+	
+		<dl>
+			<dt>选择图片：</dt>
+			<dt><input type="hidden" name="u_id" id="u_id" value="{$mation->u_id}"></dt>
+		</dl>
+		<dl>
+			<dt><input type="file" name="u_headerimg" id="u_headerimg"></dt>
+			<dt><b style="color: red;">(*图片不能大于2M,必须是jpg,png,gif,jpeg为后缀)</b></dt>
+		</dl>
+		<dl>
+			<input type="submit" value="点击上传" class="button">
+		</dl>	
+
+</body>
+</html>
+<script src="/static/front/js/jquery-2.1.1.min.js"></script>
+<script src="/static/front/layer/layer.js"></script>
+<script>
+	
+	$(document).on('click','.button',function()
+	{
+		var form = new FormData();
+		var u_id = $('#u_id').val();
+		var file = $('#u_headerimg')[0].files[0];
+		console.log(file);
+		if(file == undefined)
+		{
+			layer.msg("请添加图片", {icon: 2});return;
+		}
+		form.append('u_headerimg',file);
+		form.append('u_id',u_id);
+		$.ajax({
+			type:'post',
+			url:'/upp',
+			data:form,
+			cache: false,//上传文件不需要缓存
+			processData: false, // 告诉jQuery不要去处理发送的数据
+    		contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+    		success:function(msg)
+    		{		
+    			if(msg.code == '1000')
+    			{
+    				layer.msg(msg.msg, {icon: 1});
+                		var index = parent.layer.getFrameIndex(window.name);  
+						setTimeout(function(){
+							parent.layer.close(index);//关闭弹出层
+							parent.location.reload();//更新父级页面（提示：如果需要跳转到其它页面见下文）
+						}, 2000);
+    			}else{   			
+    				layer.msg(msg.msg, {icon: 2});
+    			}    			
+    		}
+		},'json')
+	})
+</script>

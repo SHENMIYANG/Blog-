@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>重新发送邮件</title>
+</head>
+<body>
+	<table align="center">
+		<th>该链接已过期请点击<a href="javascript:;" id="{$data->af_uid}" class="send">重新发送</a></th>
+	</table>
+	
+</body>
+</html>
+<script src="/static/login/js/jquery.js"></script>
+<script src="/static/layer/layer.js"></script>
+<script>
+	$(document).on('click','.send',function()
+	{
+		var id =  $(this).attr('id');
+		$.post('/sendemail',{id:id},function(json)
+		{
+			layer.msg(json.msg, {icon: 6,time: 2000,shade: [0.5,'#333333']},function(index){
+				location.href='/fr_login';
+
+				layer.close(index);
+			});
+
+		})		
+	})
+</script>

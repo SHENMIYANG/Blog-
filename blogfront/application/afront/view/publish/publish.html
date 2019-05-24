@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>wangEditor demo</title>
+</head>
+<style type="text/css">
+        .toolbar {
+            border: 1px solid #ccc;
+        }
+        .text {
+            border: 1px solid #ccc;
+            height: 400px;
+        }
+        #editor{
+            margin: 0 auto;
+            width: 800px;
+            height: 400px;
+        }
+        #keke{
+            margin: 0 auto;
+            width: 800px;
+        }
+        #kekes{
+            margin: 0 auto;
+            width: 800px;
+            text-align: center;
+            margin-bottom: 20px ;
+        }
+        .button { /* 按钮美化 */
+            width: 100px; /* 宽度 */
+            height: 35px; /* 高度 */
+            border-width: 0px; /* 边框宽度 */
+            border-radius: 3px; /* 边框半径 */
+            background: #1E90FF; /* 背景颜色 */
+            cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+            outline: none; /* 不显示轮廓线 */
+            font-family: Microsoft YaHei; /* 设置字体 */
+            color: white; /* 字体颜色 */
+            font-size: 13px; /* 字体大小 */
+        }
+        .button:hover { /* 鼠标移入按钮范围时改变颜色 */
+            background: #5599FF;
+        }
+            
+
+</style>
+<body>
+
+    
+    <br>
+      <div id="keke">
+        <h3>开始您的编写：</h3>
+        <br>
+        文章标题： <input type="text" name="bw_name" id="bw_name"><br><br>
+        文章简介： <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <textarea name="bw_desc" id="bw_desc" cols="100" rows="10"></textarea>
+    </div><br><br>
+    <div id="keke">
+        文章内容：
+
+    </div><br>
+    <div id="editor">
+       
+    </div>
+    <textarea  id="text1" name="bk_text" style="display: none;width:100%; height:200px;"></textarea>
+    <div id="keke">
+        私人：<input type="radio" class="bw_public" name="bw_public" value="0"> 公开：<input type="radio" class="bw_public" name="bw_public" value="1">
+    </div>
+    
+    <div id="kekes">
+        <button class="button">发 表</button> 
+    </div>
+    
+    <!-- 注意， 只需要引用 JS，无需引用任何 CSS ！！！-->
+    <script type="text/javascript" src="js/wangEditor.js"></script>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="layer/layer.js"></script>
+    <script type="text/javascript">
+        var E = window.wangEditor
+        var editor = new E('#editor')
+        var $text1 = $('#text1')
+        editor.customConfig.onchange = function (html) {
+            // 监控变化，同步更新到 textarea
+            $text1.val(html)
+        }
+        editor.create()
+        // 初始化 textarea 的值
+        $text1.val(editor.txt.html())
+        
+        $('button').click(function()
+        {
+            var bw_name = $('#bw_name').val();
+            var bw_desc = $('#bw_desc').val();
+            var bk_text = $('#text1').val();
+            var bw_public = $('.bw_public:checked').val();
+            if(bw_name == "")
+            {
+                layer.msg('标题不能为空哦', {icon: 2});
+                return false;
+            }else if(bw_desc == "")
+            {
+                layer.msg('简介不能为空哦', {icon: 2});
+                return false;
+            }else if(bk_text == "")
+            {
+                 layer.msg('内容不能为空哦', {icon: 2});
+                return false;
+            }else if(bw_public == undefined){
+                 layer.msg('请选择私有还是公开呢', {icon: 2});
+                return false;
+            }
+            $.post('/bw_add',{bw_name:bw_name,bw_desc:bw_desc,bk_text:bk_text,bw_public:bw_public},function(msg)
+            {
+                console.log(msg);
+                if(msg.code == "1000")
+                {   
+                   layer.msg(msg.msg, {icon: 6,time: 2000,shade: [0.5,'#333333']},function(index){
+                    location.href='/publish';
+                    layer.close(index);
+                    });
+                }else
+                {
+                    layer.msg(msg.msg, {icon: 2});
+                }
+            },'json');
+        })
+             
+            
+
+    </script>
+</body>
+</html>

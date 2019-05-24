@@ -1,0 +1,273 @@
+<style>
+  .button{
+      width: 20px; /* 宽度 */
+      height: 25px; /* 高度 */
+      border-width: 0px; /* 边框宽度 */
+      border-radius: 3px; /* 边框半径 */
+      background: #555555; /* 背景颜色 */
+      cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+      outline: none; /* 不显示轮廓线 */
+      font-family: Microsoft YaHei; /* 设置字体 */
+      color: white; /* 字体颜色 */
+      font-size: 15px; /* 字体大小 */
+  }
+   button:hover { /* 鼠标移入按钮范围时改变颜色 */
+            background: #5599FF;
+        }
+  #shou:hover { /* 鼠标移入按钮范围时改变颜色 */
+      background: #5599FF;
+  }
+  .shou{
+     width: 40px; /* 宽度 */
+      height: 25px; /* 高度 */
+    border-radius: 3px;
+    border-width: 0px;
+     background: #555555;
+     color: white;
+  }
+ 
+</style>
+<article>
+  <h1 class="t_nav"><a href="/" class="n1">网站首页</a><a href="/about" class="n2">我的博文</a></h1>
+  <div class="infos">
+
+    <div class="newsview">
+      <input type="hidden" id="bkid" value="{$bwtext->bw_id}">
+      <h3 class="news_title">{$bwtext->bw_name}</h3>
+      <div class="news_author"><span class="au01"><a href="/about">{$bwtext->bw_author}</a></span><span class="au02">{$bwtext->bw_createtime|date="Y-m-d"}</span><span class="au03">共<b>{$bwtext->bw_zan}</b>点赞</span></div>
+      
+      <div class="news_about"><strong>简介</strong>{$bwtext->bw_desc}</div>
+      <div class="news_infos">{$bwtext->bk_text->bk_text|raw}</div>
+    </div>
+    <div class="share">
+        <button style="margin-left:4px;" class="button" id="zan" rel="">赞</button> <b class="bw_zan">{$bwtext->bw_zan}</b>      
+        <button style="margin-left:38px;margin-top:1px;" class="button" id="cai" rel="">踩</button>  <b class="bw_cai">{$bwtext->bw_cai}</b>
+        <button style="margin-left:38px;" class="shou" id="shou">收藏</button>
+        <div >
+          
+        </div>
+     <div class="bshare-custom icon-medium-plus" style="float: right;"><div class="bsPromo bsPromo2"></div><a title="分享到" href="http://www.bShare.cn/" id="bshare-shareto" class="bshare-more">分享到</a><a title="分享到微信" class="bshare-weixin" href="javascript:void(0);"></a><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+    </div>
+    <div class="nextinfo">
+        
+    </div>
+   
+    <div class="news_pl">
+      <h2 class="ping">说说您的看法</h2>
+      <ul>
+        <div class="gbko">
+          <dl><textarea name="" id="pl_content" cols="126" rows="7"></textarea></dl><br><dl><button id="ping" class="shou" style="float: right;">评论</button></dl></div>
+      </ul>
+    </div>
+
+      <div class="otherlink" ><h2>博文的评论</h2></div>   
+      <div class="blogs" style="width: 100%">     
+         {volist name="pls" id='vo'}    
+            <li>   
+            <div class='autor'><span class='lm'><a href='/bk_user/{$vo.pl_fr_id}' title='查看该博主主页' target='_blank' class='classname'>博主：{$vo.pl_author}</a></span>
+                  <span class='dtime'>{$vo.pl_createtime|date="Y-m-d H:i:s"}</span><span class='readmore'></span></div><div class='bloginfo'><p>{$vo.pl_content}</p></div>
+           </li>
+          {/volist}
+      </div>
+    
+  <div class="nextinfo" style="text-align: center"><a class="jia" id="1">加载更多</a></div>
+  </div>
+  <div class="sidebar">
+    <div class="search">
+      <form action="/e/search/index.php" method="post" name="searchform" id="searchform">
+        <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字'}" type="text">
+        <input name="show" value="title" type="hidden">
+        <input name="tempid" value="1" type="hidden">
+        <input name="tbname" value="news" type="hidden">
+        <input name="Submit" class="input_submit" value="搜索" type="submit">
+      </form>
+    </div>
+    <div class="lmnav">
+      <h2 class="hometitle">栏目导航</h2>
+      <ul class="navbor">
+        <li><a href="/about">关于我</a></li>
+        <li><a href="/">博客首页</a>
+          <ul>
+            <li><a href="/about">我的博文</a></li>
+            <li><a href="/golook">随便看看</a></li>
+          </ul>
+        </li>
+        <li><a href="#">个人中心</a>
+          <ul>
+            <li><a href="/share">我的收藏</a></li>
+            <li><a href="/ping">我的评论</a></li>
+            <li><a href="/list">我的推荐</a></li>
+          </ul>
+        </li>
+       
+      </ul>
+    </div>
+    <div class="paihang">
+      <h2 class="hometitle">点击排行</h2>
+      <ul>
+        <li><b><a href="/download/div/2015-04-10/746.html" target="_blank">【活动作品】柠檬绿兔小白个人博客模板30...</a></b>
+          <p><i><img src="images/t02.jpg"></i>展示的是首页html，博客页面布局格式简单，没有复杂的背景，色彩局部点缀，动态的幻灯片展示，切换卡，标...</p>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="paihang">
+      <h2 class="hometitle">站长推荐</h2>
+      <ul>
+        <li><b><a href="/download/div/2015-04-10/746.html" target="_blank">【活动作品】柠檬绿兔小白个人博客模板30...</a></b>
+          <p><i><img src="images/t02.jpg"></i>展示的是首页html，博客页面布局格式简单，没有复杂的背景，色彩局部点缀，动态的幻灯片展示，切换卡，标...</p>
+        </li>
+      </ul>
+    </div>
+    <div class="weixin">
+      <h2 class="hometitle"></h2>
+      <ul>
+    
+      </ul>
+    </div>
+    <div class="ad" id="left_flow2">  </div>
+  </div>
+</article>
+
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="layer/layer.js"></script>
+<script>
+    $(document).on('click','#zan',function()
+    {
+        var bw_id = $('#bkid').val();
+        $.post('/zan',{id:bw_id
+        },function(msg)
+        {
+            if(msg.code == '1000')
+            {
+                $('.bw_zan').html(msg.data.bw_zan);
+            }else if(msg.code == '1009')
+            {
+                layer.msg(msg.msg, {icon: 5});
+                return false;
+            }else
+            {
+              layer.msg(msg.msg);
+              return false;
+            }
+        },'json')
+    })
+    $(document).on('click','#cai',function()
+    {
+        var bw_id = $('#bkid').val();
+        $.post('/cai',{id:bw_id},function(msg)
+        {
+            if(msg.code == '1000')
+            {
+                $('.bw_cai').html(msg.data.bw_cai);
+            }else if(msg.code == '1009')
+            {
+                layer.msg(msg.msg, {icon: 5});
+                return false;
+            }else
+            {
+              layer.msg(msg.msg);
+              return false;
+            } 
+        },'json')
+    })
+    $(document).on('click','#shou',function()
+    {
+        var bw_id = $('#bkid').val();
+        $.post('/shou',{bw_id:bw_id},function(msg)
+        {
+        
+            if(msg.code == '1001')
+            {
+              layer.msg(msg.msg);
+                
+            }else if(msg.code == '1009')
+            {
+                layer.msg(msg.msg, {icon: 5});
+                return false;
+            }else
+            {
+              layer.alert(msg.msg, {
+                icon: 6,
+                title: "提示"
+                });
+              return false;
+            }
+        },'json')
+    })
+   
+  $(document).on('click','#ping',function()
+  {
+       var bw_id = $('#bkid').val();
+       var pl_content = $('#pl_content').val();
+       if(pl_content == "")
+       {
+          return false;
+       }
+      $.post('/pingadd',{bw_id:bw_id,pl_content:pl_content},function(msg)
+      {
+            if(msg.code == '1002')
+            {
+              layer.alert(msg.msg, {
+                  icon: 5,
+                  title: "提示"
+                  });
+              return ;
+            }else if(msg.code == '1001')
+            {
+               layer.alert(msg.msg, {
+                  icon: 5,
+                  title: "提示"
+                  });
+               return ;
+            }else if( msg.code == '1000')
+            {
+               layer.msg(msg.msg, {icon: 6,time: 2000,shade: [0.5,'#333333']},function(index){
+                  location.reload();
+                  layer.close(index);
+              });
+              return ;
+            }
+      },'json')
+  })
+
+  $(document).on('click','.jia',function(msg)
+  {
+        var bw_id = $('#bkid').val();
+        var page = $(this).attr('id');
+        var culpage = parseInt(page)+1;
+        var obj = $(this);
+        $.post('/pingpage',{bw_id:bw_id,page:culpage},function(msg)
+        {
+            // console.log(msg.data);
+            if(msg.code == '1001')
+            {
+
+              obj.attr('id',culpage);
+              var pagehtml = "";
+
+              $(msg.data).each(function(k,v)
+              {
+                  pagehtml +="<li><div class='autor'><span class='lm'><a href='/bk_user/"+v.pl_fr_id+"' title='查看该博主主页' target='_blank' class='classname'>博主："+v.pl_author+"</a></span><span class='dtime'>"+v.pl_createtime+"</span><span class='readmore'></span></div><div class='bloginfo'><p>"+v.pl_content+"</p></div></li>";               
+              })
+              
+              $('.blogs').append(pagehtml);
+            }
+            else if(msg.code == '1002')
+            {
+              layer.alert(msg.msg, {
+                  icon: 5,
+                  title: "提示"
+                  });
+              return ;
+            }else
+            {
+              layer.msg(msg.msg);    
+            }
+        },'json')
+
+  })
+
+
+
+</script>

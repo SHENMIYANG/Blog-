@@ -1,0 +1,179 @@
+<article>
+  <h1 class="t_nav"><span>像“草根”一样，紧贴着地面，低调的存在，冬去春来，枯荣无恙。</span><a href="/" class="n1">网站首页</a><a href="javascript:;" class="n2">我的粉丝</a></h1>
+
+   
+  
+        <div class="blogs">
+           <div class="news_infos">
+          
+        </div>
+        <div id="pageBar"  class="pagelist"><!--这里添加分页按钮栏--></div> 
+        </div>
+        
+    
+
+    <div class="sidebar">
+      <div class="lmnav">
+        <h2 class="hometitle">栏目导航</h2>
+        <ul class="navbor">
+            <li><a href="/about">关于我</a></li>
+            <li><a href="/">博客首页</a>
+                <ul>
+                    <li><a href="/about">我的博文</a></li>
+                    <li><a href="/golook">随便看看</a></li>
+                </ul>
+            </li>
+            <li><a href="#">个人中心</a>
+                <ul>
+                    <li><a href="/share">我的收藏</a></li>
+                    <li><a href="/ping">我的评论</a></li>
+                    <li><a href="/list">我的推荐</a></li>
+                </ul>
+            </li>
+         
+        </ul>
+      </div>     
+  </div>
+     
+  
+  
+  
+</article>
+<style>
+  .touxiang{
+    margin-right: 15px;  width: 74px; height: 74px; float:left; border-radius: 50%; border: 3px solid #eee; overflow: hidden;
+  }
+</style>
+<link rel="stylesheet" href="tanchu/style.css" media="all" />
+<script src="tanchu/jquery.min.js"></script>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="layer/layer.js"></script>
+<script>
+  $(document).on('click','.title',function ($) {
+          var index = layer.open({
+              type: 2,
+              title: '上传头像',
+              shadeClose: true,
+              maxmin: true, //开启最大化最小化按钮
+              shade: [0.1,'#fff'],
+              area: ['500px', '500px'],
+              content: '/upp' //iframe的url
+            }); 
+
+    });
+</script>
+<script>
+  var curPage;        //当前页数
+
+  var total; //总记录数
+  var size; //每一页记录数
+  var totalPage; //总页数
+  $(function () {
+
+      turnPage(1);
+
+  });
+
+  function turnPage(page)
+  {
+    $.ajax({
+      type:'get',
+      url:'/fspage',
+      data: {'curPage': page},
+      dataType: 'json',
+      beforeSend: function () {
+         $("#data-area ul").append("加载中...");
+      },
+      success:function(data)
+      {
+          console.log(data);
+        $(".news_infos").empty();       //移除原来的分页数据
+         total = data.data.total; // 返回的总记录数
+         size = data.data.size; //返回的每一页记录数
+         curPage = page; //返回的当前页码
+         totalPage = data.data.totalPage; //返回的总页数
+       
+        var data = data.data.data; //返回的数据内容
+        if(data == "")
+         {
+            layer.msg("您没有粉丝哦，赶快去发表博文吧！", {icon: 5});  
+            return false;
+         }
+        var data_html = "";
+        
+        $.each(data, function (index, array) { 
+          data_html += "<li><div class='touxiang'><img width='60' height='60' src='/uploads/"+array.user.mation.u_headimg+"'>  </div><h3 ><a href='/bk_user/"+array.fans_user+"' title='查看该粉丝主页'>"+array.user.strlookname+"</a></h3><p> 签名："+array.user.mation.u_signature+"</p><span>关注时间："+array.fans_times+"</span></li>";
+       }); 
+
+         $(".news_infos").append(data_html);
+
+         getPageBar();
+      },
+      error: function () {
+       alert("数据加载失败");
+      }
+    })
+  }
+
+  /*
+  total       总记录数
+  size        每一页记录数
+  curPage     当前页码
+  totalPage   总页数
+   */
+  function getPageBar()
+  { 
+      if(curPage>totalPage)
+      {
+        curPage = totalPage;
+      }
+      if(curPage< 1)
+      {
+        curPage = 1;
+      }
+
+      pageBar = "";
+
+      if(curPage != 1)
+      {
+        pageBar += "<span class='pageBtn'><a  href='javascript:turnPage(1)'>首页</a></span>";
+        pageBar += "<span class='pageBtn'><a  href='javascript:turnPage("+(curPage-1)+")'>上一页</a></span>";
+      }
+      //显示五个按钮
+      var start,end;
+      if(totalPage <= 5)
+      {
+        start = 1;
+        end = totalPage;
+      }
+      else
+      {
+          //当前页码与总页数相差1个的时候，要显示之前的页码
+          if(totalPage - curPage < 2 )
+          {
+            start = totalPage - 4;
+            end = totalPage;
+          }else{
+              //显示前面两个和后面两个
+            start = curPage - 2;
+            end  = curPage +2;
+          }      
+      }
+      for (var i = start; i <= end; i++) {
+          if(i == curPage)
+          {
+              pageBar += "<span class='pageBtn'><a  href='javascript:turnPage(" + i + ")'>" + i + "</a></span>";
+          }else
+          {
+              pageBar += "<span class='pageBtn'><a href='javascript:turnPage(" + i + ")'>" + i + "</a></span>";
+          }
+      }
+      if (curPage != totalPage) {
+         pageBar += "<span class='pageBtn'><a href='javascript:turnPage(" + (parseInt(curPage) + 1) + ")'>下一页</a></span>";
+         pageBar += "<span class='pageBtn'><a href='javascript:turnPage(" + totalPage + ")'>尾页</a></span>";
+      }
+      $("#pageBar").html(pageBar);
+  }
+
+
+</script>

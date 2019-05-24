@@ -1,0 +1,218 @@
+<article>
+  <h1 class="t_nav"><span>一个人越懒，明天要做的事越多；一个人越勤奋，明天的好日子就越多。</span><a href="/" class="n1">网站首页</a><a href="#" class="n2">TA的博客主页</a></h1>
+     <div class="blogs">
+           <div class="news_infos">
+          
+        </div>
+        <div id="pageBar" class="pagelist"><!--这里添加分页按钮栏--></div> 
+        </div>
+    <div class="rightbox">
+      <div class="aboutme">
+        <h2 class="hometitle">关于TA</h2>
+        <div class="avatar"> 
+          <input type="hidden" class="user_id" value="{$user->id}">  
+        		<img width="100" height="100" src="/uploads/{$mation->u_headimg}">	
+        </div>
+
+        <div style="text-align: center;width:336px;height:60px;margin-top: 10px">
+            <dl id="guan">
+              {switch status}
+                {case 0}
+                    <button class="button guanzhu" >关注TA</button>  
+                    {/case}
+                {case 1}
+                    <button class="button quxiao" >取消关注</button>
+                    {/case}
+                {case 2}
+                    {/case}
+              {/switch}
+              
+            </dl>
+	        	<dl style="text-align: center;display: inline-block">
+	        		<dt>关注</dt>
+	        		<dt>{$follow}</dt>
+	        	</dl>
+	        	<dl style="text-align: center;display: inline-block">
+	        		<dt>|</dt>
+	        		<dt>&nbsp;</dt>
+	        	</dl> 
+	        	<dl style="text-align: center;display: inline-block">
+	        		<dt>粉丝</dt>
+	        		<dt>{$fans}</dt>
+	        	</dl> 
+	        </div>
+        <div class="ab_con">       	
+	        <p>网名：{$user->strlookname}</p>   
+	        <p>注册时间：{$user->strcreatetime|date="Y-m-d H:i:s"}</p>      	
+        </div>
+      </div>
+      
+      
+    </div>
+  </div>
+  
+</article>
+<style>
+  .button { /* 按钮美化 */
+  width: 70px; /* 宽度 */
+  height: 25px; /* 高度 */
+  border-width: 0px; /* 边框宽度 */
+  border-radius: 3px; /* 边框半径 */
+  background: #1E90FF; /* 背景颜色 */
+  cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+  outline: none; /* 不显示轮廓线 */
+  font-family: Microsoft YaHei; /* 设置字体 */
+  color: white; /* 字体颜色 */
+  font-size: 13px; /* 字体大小 */
+  }
+  .button:hover { /* 鼠标移入按钮范围时改变颜色 */
+    background: #5599FF;
+  }
+
+</style>
+<link rel="stylesheet" href="tanchu/style.css" media="all" />
+<script src="tanchu/jquery.min.js"></script>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="layer/layer.js"></script>
+<script>
+  var curPage;        //当前页数
+
+  var total; //总记录数
+  var size; //每一页记录数
+  var totalPage; //总页数
+  $(function () {
+
+      turnPage(1);
+
+  });
+
+  function turnPage(page)
+  {
+    var user_id = $('.user_id').val();
+    $.ajax({
+      type:'get',
+      url:'/user_page',
+      data: {'curPage': page,id:user_id},
+      dataType: 'json',
+      beforeSend: function () {
+         $("#data-area ul").append("加载中...");
+      },
+      success:function(data)
+      {
+
+        $(".news_infos").empty();       //移除原来的分页数据
+         total = data.data.total; // 返回的总记录数
+         size = data.data.size; //返回的每一页记录数
+         curPage = page; //返回的当前页码
+         totalPage = data.data.totalPage; //返回的总页数
+        var data = data.data.data; //返回的数据内容
+        var data_html = "";
+        $.each(data, function (index, array) {
+           data_html += "<li><h3 class='blogtitl'><a href='/'>"+array.bw_name+"</a></h3><div class='bloginfo'><p>"+array.bw_abstract+"</p></div><div class='autor'><span class='lm'><a href='/bk_user/"+array.bw_user_id+"' title='查看该博主主页' target='_blank' class='classname'>博主："+array.bw_author+"</a></span><span class='dtime'>"+array.bw_createtime+"</span><span class='viewnum'>赞(<a href='/'>0</a>)</span><span class='readmore'><a href='/bktext/"+array.bw_id+"' title='查看博客正文'>阅读原文</a></span></div></li>";
+       }); 
+
+         $(".news_infos").append(data_html);
+         getPageBar();
+      },
+      error: function () {
+       alert("数据加载失败");
+      }
+    })
+  }
+
+  /*
+  total       总记录数
+  size        每一页记录数
+  curPage     当前页码
+  totalPage   总页数
+   */
+  function getPageBar()
+  { 
+      if(curPage>totalPage)
+      {
+        curPage = totalPage;
+      }
+      if(curPage< 1)
+      {
+        curPage = 1;
+      }
+
+      pageBar = "";
+
+      if(curPage != 1)
+      {
+        pageBar += "<span class='pageBtn'><a  href='javascript:turnPage(1)'>首页</a></span>";
+        pageBar += "<span class='pageBtn'><a  href='javascript:turnPage("+(curPage-1)+")'>上一页</a></span>";
+      }
+      //显示五个按钮
+      var start,end;
+      if(totalPage <= 5)
+      {
+        start = 1;
+        end = totalPage;
+      }
+      else
+      {
+          //当前页码与总页数相差1个的时候，要显示之前的页码
+          if(totalPage - curPage < 2 )
+          {
+            start = totalPage - 4;
+            end = totalPage;
+          }else{
+              //显示前面两个和后面两个
+            start = curPage - 2;
+            end  = curPage +2;
+          }      
+      }
+      for (var i = start; i <= end; i++) {
+          if(i == curPage)
+          {
+              pageBar += "<span class='pageBtn'><a  href='javascript:turnPage(" + i + ")'>" + i + "</a></span>";
+          }else
+          {
+              pageBar += "<span class='pageBtn'><a href='javascript:turnPage(" + i + ")'>" + i + "</a></span>";
+          }
+      }
+      if (curPage != totalPage) {
+         pageBar += "<span class='pageBtn'><a href='javascript:turnPage(" + (parseInt(curPage) + 1) + ")'>下一页</a></span>";
+         pageBar += "<span class='pageBtn'><a href='javascript:turnPage(" + totalPage + ")'>尾页</a></span>";
+      }
+      $("#pageBar").html(pageBar);
+  }
+
+  $(document).on('click','.guanzhu',function()
+  {
+
+    var user_id = $('.user_id').val();
+      $.post('/followadd',{followed_user:user_id},function(msg){
+         if(msg.code == '1001')
+         {
+            $('#guan').html('<button class="button quxiao">取消关注</button>');
+         }else if(msg.code == '1009')
+          {
+              layer.msg(msg.msg, {icon: 5});
+              return false;
+          }else
+         {
+              layer.msg(msg.msg);
+         }
+      },'json')
+  })
+   $(document).on('click','.quxiao',function()
+  {
+    var user_id = $('.user_id').val();
+      $.post('/followdel',{followed_user:user_id},function(msg){
+         if(msg.code == '1001')
+         {
+            $('#guan').html('<button class="button guanzhu">关注TA</button>');
+         }else if(msg.code == '1009')
+          {
+              layer.msg(msg.msg, {icon: 5});
+              return false;
+          }else
+         {
+              layer.msg(msg.msg);
+         }
+      },'json')
+  })
+</script>

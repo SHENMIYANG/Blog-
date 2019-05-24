@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="gb2312">
+<title>自由博客</title>
+<base href="/static/front/">
+<meta name="keywords" content="自由博客" />
+<meta name="description" content="自由博客" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="css/base.css" rel="stylesheet">
+<link href="css/index.css" rel="stylesheet">
+<link href="css/m.css" rel="stylesheet">
+<!--[if lt IE 9]>
+<script src="js/modernizr.js"></script>
+<![endif]-->
+<script>
+window.onload = function ()
+{
+	var oH2 = document.getElementsByTagName("h2")[0];
+	var oUl = document.getElementsByTagName("ul")[0];
+	oH2.onclick = function ()
+	{
+		var style = oUl.style;
+		style.display = style.display == "block" ? "none" : "block";
+		oH2.className = style.display == "block" ? "open" : ""
+	}
+}
+</script>
+</head>
+<body>
+<header>
+  <div class="tophead">
+   <div class="logo"><a href="/">自由博客</a></div>
+    <div id="mnav">
+       <nav class="topnav" id="topnav">
+      <ul>
+         <li><a href="">登录</a></li>
+        <li><a href="">退出</a></li>
+      </ul>
+     
+    </nav>
+      <h2><span class="navicon"></span></h2>
+      <ul>
+        <li><a href="/">博客首页</a></li>
+        <li><a href="/about">关于我</a></li>
+        <li><a href="/share">我的收藏</a></li>
+        <li><a href="/list">我的推荐</a></li>
+        <li><a href="/info">信息设置</a></li>
+        <li><a href="/publish">发表博文</a></li>
+        <li><a href="/golook">随便看看</a></li>
+      </ul>
+    </div>
+      <nav class="topnav" id="topnav">
+        
+    </nav>
+    <nav class="topnav" id="topnav">
+      <ul>
+        <li><a href="/">博客首页</a></li>
+        <li><a href="/about">关于我</a></li>
+        <li><a href="/share">我的收藏</a></li>
+        <li><a href="/list">我的推荐</a></li>
+        <li><a href="/info">信息设置</a></li>
+        <li><a href="/publish">发表博文</a></li>
+        <li><a href="/golook">随便看看</a></li>
+        <li>
+          {eq name='$Think.Session.user_name' value=""}
+               <a href="/fr_login">登录</a>
+          {else/}
+              <a href="/info">{$Think.Session.user_name}</a>
+               <a href="javascript:;" class="loginout">退出</a>
+          {/eq}          
+        </li> 
+      </ul>
+    </nav>   
+  </div>
+
+</header>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script>
+    
+    $(document).on('click','.loginout',function(){
+        $.post('/loginout',{},function(msg)
+        {
+            layer.msg(msg.msg, {icon: 6,time: 2000,shade: [0.5,'#333333']},function(index){
+                location.reload();
+                layer.close(index);
+            });
+        })
+    })
+
+</script>
