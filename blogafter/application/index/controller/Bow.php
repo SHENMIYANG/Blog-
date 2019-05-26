@@ -41,9 +41,10 @@ class Bow extends Common
 		}
 		
 	}
-	public function keyworddel($id)
+	//删除关键字
+	public function keyworddel($af_key_word)
 	{
-		$res = DB('af_keyword')->where('id',$id)->delete();
+		$res = DB('af_keyword')->where('af_key_word',$af_key_word)->delete();
 		if($res)
 			{
 				return  json(['code'=>'1002','msg'=>'删除成功']);
