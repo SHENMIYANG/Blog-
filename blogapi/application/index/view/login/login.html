@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>上传头像测试</title>
+</head>
+<body>
+	<input type="hidden" name="u_id" id="u_id" value="1}">
+	<input type="file" name="u_headimg" id="u_headimg">
+	<button class="go">上传</button>
+</body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script>
+	$(document).on('click','.go',function()
+	{
+		var form = new FormData();
+		var u_id = $('#u_id').val();
+		var file = $('#u_headimg')[0].files[0];
+
+		console.log(file);
+		if(file == undefined)
+		{
+			alert('请添加图片');
+			return;
+		}
+		form.append('u_headimg',file);
+		form.append('u_id',u_id);
+		$.ajax({
+			'type':'post',
+			'url':'http://blogapi.test/upimage?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJhdWQiOiIiLCJpYXQiOjE1NTkxMTM5MTcsIm5iZiI6MTU1OTExMzkxNywiZXhwIjoxNTkwNjQ5OTE3LCJ1aWQiOjE1fQ.rEarWM73hxTHE1exLcaz7XWwBQig2zlPoA9n_NplAyM&u_id=1',
+			data:form,
+			cache: false,//上传文件不需要缓存
+			processData: false, // 告诉jQuery不要去处理发送的数据
+    		contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+    		success:function(msg)
+    		{
+    			console.log(msg);
+    		}
+
+		},'json')
+	})
+</script>
